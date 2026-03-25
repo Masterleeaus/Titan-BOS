@@ -47,3 +47,4 @@ python_files = ["test_*.py"]
 
 [project.scripts]
 titan-node = "src.node_registry:main"
+titan-relay = "src.relay:main"

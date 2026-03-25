@@ -43,6 +43,7 @@ class NodeConfig:
     qmp_port: int = 47338
     git_port: int = 9418
     api_port: int = 8765          # HTTP API for Laravel dashboard (0 = disabled)
+    relay_url: Optional[str] = None  # "host:port" of a public relay, or None
     enable_lan_discovery: bool = True
     enable_git_daemon: bool = True
 
@@ -78,6 +79,7 @@ class Node:
         self._peer_writers: Dict[str, asyncio.StreamWriter] = {}
         self._running = False
         self._api_server = None
+        self._relay_client = None
 
     # -------------------------------------------------------------------------
     # Identity shortcut
@@ -113,6 +115,10 @@ class Node:
         if self.config.api_port > 0:
             await self.start_api(port=self.config.api_port)
 
+        # Connect to relay for WAN peer discovery / NAT traversal
+        if self.config.relay_url:
+            await self._start_relay()
+
         # Connect to already-known peers
         self._running = True
         await self._connect_to_known_peers()
@@ -127,6 +133,8 @@ class Node:
         self._running = False
         if self._api_server:
             await self._api_server.stop()
+        if self._relay_client:
+            await self._relay_client.disconnect()
         if self.config.enable_lan_discovery:
             await self.registry.stop_discovery()
         if self.config.enable_git_daemon:
@@ -134,6 +142,92 @@ class Node:
         await self.qmp.stop()
         self._peer_writers.clear()
         logger.info("Node stopped")
+
+    async def _start_relay(self):
+        """Connect to the configured relay server and register."""
+        from src.relay.client import RelayClient
+        url = self.config.relay_url
+        if ":" not in url:
+            logger.error(f"Invalid relay_url '{url}' — expected host:port")
+            return
+        host, port_str = url.rsplit(":", 1)
+        try:
+            port = int(port_str)
+        except ValueError:
+            logger.error(f"Invalid relay port in relay_url '{url}'")
+            return
+
+        self._relay_client = RelayClient(
+            node_id=self.node_id,
+            keypair=self.registry.keypair,
+            qmp_service=self.qmp,
+            qmp_port=self.registry.local_node.port,
+        )
+        self._relay_client.on_peer_discovered = self._handle_relay_peer
+
+        try:
+            await self._relay_client.connect(host, port)
+            logger.info(f"Node connected to relay at {host}:{port}")
+        except OSError as e:
+            logger.warning(f"Could not connect to relay {host}:{port}: {e}")
+            self._relay_client = None
+
+    async def _handle_relay_peer(self, peer_info: dict):
+        """
+        Called when the relay tells us about a registered peer.
+
+        Attempt direct TCP first; if that fails, send the handshake via relay.
+        The peer's node_id and public_key come from relay.peers — they were
+        already verified by the relay server on registration.
+        """
+        peer_node_id = peer_info.get("node_id", "")
+        if not peer_node_id or peer_node_id == self.node_id:
+            return
+        if peer_node_id in self._peer_writers:
+            return  # already connected
+
+        # Register peer in registry using relay-provided info
+        pub_key = peer_info.get("public_key", "")
+        host    = peer_info.get("host", "relay")
+        port    = int(peer_info.get("port", 0))
+
+        if pub_key:
+            self.registry.add_peer(host, port, peer_node_id, pub_key, [])
+
+        # Try direct TCP; fall back to relay
+        if port > 0:
+            peer = self.registry.get_peer(peer_node_id)
+            if peer:
+                try:
+                    await asyncio.wait_for(
+                        self._connect_to_peer(peer), timeout=5.0
+                    )
+                    return
+                except (asyncio.TimeoutError, Exception):
+                    pass  # fall through to relay handshake
+
+        # Relay-routed handshake
+        await self._send_handshake_via_relay(peer_node_id)
+
+    async def _send_handshake_via_relay(self, peer_node_id: str):
+        """Send our QMP handshake to a peer through the relay."""
+        if not self._relay_client or not self._relay_client.is_connected:
+            return
+        handshake = self.qmp.create_message(
+            {
+                "node_id": self.node_id,
+                "public_key": self.registry.local_node.public_key,
+                "qmp_port": self.registry.local_node.port,
+                "capabilities": self.registry.local_node.capabilities,
+                "signature": self.registry.keypair.sign(self.node_id.encode()),
+            },
+            "node.handshake",
+        )
+        try:
+            await self._relay_client.send_via_relay(peer_node_id, handshake)
+            logger.info(f"Sent handshake via relay to {peer_node_id[:16]}...")
+        except Exception as e:
+            logger.debug(f"Relay handshake to {peer_node_id[:16]}... failed: {e}")
 
     async def start_api(self, host: str = "127.0.0.1", port: int = 8765) -> tuple:
         """Start the HTTP JSON API server (for the Laravel dashboard)."""
@@ -264,12 +358,15 @@ class Node:
             # Keep reading messages from this peer using the QMP read loop
             await self.qmp._handle_connection(reader, writer)
 
-        except (ConnectionRefusedError, OSError) as e:
+        except (ConnectionRefusedError, OSError, asyncio.TimeoutError) as e:
             logger.debug(
-                f"Could not connect to peer {peer.node_id[:16]}... "
-                f"at {peer.host}:{peer.port}: {e}"
+                f"Direct connect to {peer.node_id[:16]}... "
+                f"at {peer.host}:{peer.port} failed: {e}"
             )
             self._peer_writers.pop(peer.node_id, None)
+            # Relay fallback — send handshake through relay if available
+            if peer.node_id and not peer.node_id.startswith("unknown_"):
+                await self._send_handshake_via_relay(peer.node_id)
 
     async def connect_to_peer(self, host: str, port: int):
         """
@@ -310,4 +407,9 @@ class Node:
             "repos": len(self.federation.list_repos()),
             "identities": len(self.didn.identities),
             "git_daemon_running": self.federation.server_running(),
+            "relay_url": self.config.relay_url,
+            "relay_connected": (
+                self._relay_client is not None
+                and self._relay_client.is_connected
+            ),
         }
