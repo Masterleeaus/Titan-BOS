@@ -42,6 +42,7 @@ class NodeConfig:
     storage_path: str = "~/.titan-bos"
     qmp_port: int = 47338
     git_port: int = 9418
+    api_port: int = 8765          # HTTP API for Laravel dashboard (0 = disabled)
     enable_lan_discovery: bool = True
     enable_git_daemon: bool = True
 
@@ -76,6 +77,7 @@ class Node:
         # node_id -> writer, tracked for targeted sends
         self._peer_writers: Dict[str, asyncio.StreamWriter] = {}
         self._running = False
+        self._api_server = None
 
     # -------------------------------------------------------------------------
     # Identity shortcut
@@ -107,6 +109,10 @@ class Node:
         if self.config.enable_lan_discovery:
             await self.registry.start_discovery()
 
+        # Start HTTP API for Laravel dashboard
+        if self.config.api_port > 0:
+            await self.start_api(port=self.config.api_port)
+
         # Connect to already-known peers
         self._running = True
         await self._connect_to_known_peers()
@@ -119,6 +125,8 @@ class Node:
     async def stop(self):
         """Gracefully shut down all subsystems."""
         self._running = False
+        if self._api_server:
+            await self._api_server.stop()
         if self.config.enable_lan_discovery:
             await self.registry.stop_discovery()
         if self.config.enable_git_daemon:
@@ -126,6 +134,12 @@ class Node:
         await self.qmp.stop()
         self._peer_writers.clear()
         logger.info("Node stopped")
+
+    async def start_api(self, host: str = "127.0.0.1", port: int = 8765) -> tuple:
+        """Start the HTTP JSON API server (for the Laravel dashboard)."""
+        from src.node.api import NodeAPIServer
+        self._api_server = NodeAPIServer(self)
+        return await self._api_server.start(host=host, port=port)
 
     # -------------------------------------------------------------------------
     # QMP message handlers

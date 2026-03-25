@@ -799,6 +799,21 @@ Route::middleware(['auth', 'updateUserActivity'])
                 Route::view('license', 'panel.admin.license.index')->name('license.index');
 
                 Route::post('translations/auto/{lang}', [TranslateController::class, 'autoTranslate'])->name('translations.auto');
+
+                // Titan-BOS federated node dashboard
+                Route::prefix('titan-node')
+                    ->name('titan-node.')
+                    ->controller(\App\Http\Controllers\Dashboard\TitanNodeController::class)
+                    ->group(function () {
+                        Route::get('/', 'index')->name('index');
+                        Route::get('api/status', 'status')->name('status');
+                        Route::get('api/peers', 'peers')->name('peers');
+                        Route::get('api/repos', 'repos')->name('repos');
+                        Route::get('api/identities', 'identities')->name('identities');
+                        Route::post('api/connect', 'connect')->name('connect');
+                        Route::post('api/repos/create', 'createRepo')->name('repos.create');
+                        Route::post('api/repos/sync', 'syncRepos')->name('repos.sync');
+                    });
             });
 
         // Coupons
