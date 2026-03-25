@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('team_id')->nullable();
             $table->string('status')->default('pending');
             $table->timestamp('created_at')->useCurrent();
+            // queued_at intentionally tracks capture order, distinct from created_at audit stamp.
             $table->timestamp('processed_at')->nullable();
             $table->timestamp('queued_at')->useCurrent();
             $table->timestamp('updated_at')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration {
         Schema::create('tz_sync_queue', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('object_type')->nullable();
+            // object_id references the local signal id captured in tz_local_signals.
             $table->string('object_id')->nullable();
             $table->string('action')->nullable();
             $table->string('status')->default('pending');

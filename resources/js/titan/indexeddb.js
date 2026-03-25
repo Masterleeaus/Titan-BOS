@@ -11,7 +11,7 @@ const STORES = [
   'tz_runtime_meta',
 ];
 
-export function initDB() {
+export function initTitanDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
@@ -28,76 +28,79 @@ export function initDB() {
     request.onerror = () => reject(request.error);
   });
 }
+export const initDB = initTitanDB;
 
-const withStore = async (storeName, mode, callback) => {
-  const db = await initDB();
+const runWrite = async (storeName, mutator) => {
+  const db = await initTitanDB();
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(storeName, mode);
+    const tx = db.transaction(storeName, 'readwrite');
     const store = tx.objectStore(storeName);
-    callback(store, resolve, reject);
+    const request = mutator(store);
+    tx.oncomplete = () => resolve(true);
     tx.onerror = () => reject(tx.error);
+    request.onerror = () => reject(request.error);
   });
 };
 
 export async function putRecord(storeName, record) {
-  return withStore(storeName, 'readwrite', (store, resolve) => {
-    store.put({ ...record, updated_at: Date.now() });
-    resolve(true);
-  });
+  return runWrite(storeName, (store) => store.put({ ...record, updated_at: Date.now() }));
 }
 
 export async function getRecord(storeName, key) {
-  return withStore(storeName, 'readonly', (store, resolve) => {
+  const db = await initTitanDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(storeName, 'readonly');
+    const store = tx.objectStore(storeName);
     const req = store.get(key);
     req.onsuccess = () => resolve(req.result);
-    req.onerror = () => resolve(null);
+    req.onerror = () => reject(req.error);
+    tx.onerror = () => reject(tx.error);
   });
 }
 
 export async function queueSignal(signal) {
-  return withStore('tz_local_signals', 'readwrite', (store, resolve) => {
+  return runWrite('tz_local_signals', (store) =>
     store.add({
       ...signal,
       status: 'pending',
       queued_at: Date.now(),
-    });
-    resolve(true);
-  });
+    }),
+  );
 }
 
 export async function flushSignals(limit = 50) {
-  const pending = await readPendingSignals(limit);
+  const pending = await _readPendingSignals(limit);
 
   await Promise.all(
     pending.map((signal) =>
-      withStore('tz_sync_queue', 'readwrite', (store, resolve) => {
+      runWrite('tz_sync_queue', (store) =>
         store.add({
-          object_type: signal.signal_type ?? 'signal',
+          // Fallback to 'unknown_signal' when type metadata is absent.
+          object_type: signal.signal_type ?? 'unknown_signal',
           object_id: signal.id ?? null,
           action: signal.action ?? 'capture',
           status: 'pending',
           retry_count: 0,
-          payload_json: signal.payload_json ?? signal,
+          payload_json: signal.payload_json ?? signal.payload ?? null,
           created_at: Date.now(),
-        });
-        resolve(true);
-      }),
+        }),
+      ),
     ),
   );
 
   await Promise.all(
     pending.map((signal) =>
-      withStore('tz_local_signals', 'readwrite', (store, resolve) => {
-        store.put({ ...signal, status: 'queued', updated_at: Date.now() });
-        resolve(true);
-      }),
+      runWrite('tz_local_signals', (store) =>
+        store.put({ ...signal, status: 'queued', updated_at: Date.now() }),
+      ),
     ),
   );
 
   return pending.length;
 }
 
-async function readPendingSignals(limit = 50) {
+// Internal helper to keep pending-signal traversal private to this module.
+async function _readPendingSignals(limit = 50) {
   const db = await initDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction('tz_local_signals', 'readonly');

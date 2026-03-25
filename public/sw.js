@@ -1,10 +1,11 @@
 const CACHE_NAME = 'titan-zero-bos-cache-v2';
 const STATIC_SHELL = ['/', '/offline', '/manifest.webmanifest'];
-const OFFLINE_RESPONSE = new Response('You are offline. Your action was queued.', {
+const OFFLINE_RESPONSE = new Response('You are offline. Please try again when connected.', {
   headers: { 'Content-Type': 'text/plain' },
 });
 
-const QUEUE_DB = 'titan-zero-bos-sw';
+// Dedicated SW queue database (separate from app IndexedDB) for transient replay payloads.
+const QUEUE_DB = 'titan-zero-bos-sync';
 const QUEUE_STORE = 'tz_sync_queue';
 
 const openQueueDb = () =>
@@ -22,12 +23,14 @@ const openQueueDb = () =>
 
 async function queueRequest(request) {
   const db = await openQueueDb();
-  const body = request.method === 'GET' ? null : await request.clone().text();
+  const serialized = await serializeBody(request.clone());
   const record = {
     url: request.url,
     method: request.method,
     headers: Array.from(request.headers.entries()),
-    body,
+    body: serialized.body,
+    bodyType: serialized.type,
+    contentType: serialized.contentType,
     queued_at: Date.now(),
   };
 
@@ -43,12 +46,15 @@ async function queueRequest(request) {
 
 async function replayQueuedRequests() {
   const db = await openQueueDb();
-  const tx = db.transaction(QUEUE_STORE, 'readwrite');
-  const store = tx.objectStore(QUEUE_STORE);
-  const queued = [];
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(QUEUE_STORE, 'readwrite');
+    const store = tx.objectStore(QUEUE_STORE);
+    const queued = [];
+    tx.onerror = () => reject(tx.error);
 
-  return new Promise((resolve) => {
-    store.openCursor().onsuccess = async (event) => {
+    const cursorRequest = store.openCursor();
+    cursorRequest.onerror = () => reject(cursorRequest.error);
+    cursorRequest.onsuccess = async (event) => {
       const cursor = event.target.result;
       if (!cursor) {
         resolve(queued.length);
@@ -60,7 +66,7 @@ async function replayQueuedRequests() {
         await fetch(requestData.url, {
           method: requestData.method,
           headers: requestData.headers,
-          body: requestData.body,
+          body: rebuildRequestBody(requestData),
         });
         store.delete(cursor.primaryKey);
         queued.push(requestData);
@@ -120,3 +126,25 @@ self.addEventListener('sync', (event) => {
     event.waitUntil(replayQueuedRequests());
   }
 });
+
+async function serializeBody(request) {
+  if (request.method === 'GET') {
+    return { body: null, type: 'none', contentType: null };
+  }
+
+  const contentType = request.headers.get('Content-Type') || '';
+  if (contentType.includes('application/json') || contentType.startsWith('text/')) {
+    return { body: await request.text(), type: 'text', contentType };
+  }
+
+  const buffer = await request.arrayBuffer();
+  return { body: buffer, type: 'arrayBuffer', contentType };
+}
+
+function rebuildRequestBody(requestData) {
+  if (requestData.bodyType === 'arrayBuffer' && requestData.body) {
+    return new Blob([requestData.body], { type: requestData.contentType || '' });
+  }
+
+  return requestData.body;
+}

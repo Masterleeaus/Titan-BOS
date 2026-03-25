@@ -22,9 +22,9 @@ class TelemetryService
         $this->writeMeta($subsystem, 'fallback', $provider, $success, $latencyMs, $metadata);
     }
 
-    public function logFailure(string $subsystem, string $event, array $metadata = []): void
+    public function logFailure(string $subsystem, string $event, array $metadata = [], string $executionLayer = 'device'): void
     {
-        $this->writeMeta($subsystem, $event, executionLayer: 'device', success: false, metadata: $metadata);
+        $this->writeMeta($subsystem, $event, $executionLayer, false, metadata: $metadata);
     }
 
     public function logLatency(string $subsystem, string $executionLayer, int $latencyMs, array $metadata = []): void
@@ -51,7 +51,7 @@ class TelemetryService
             'execution_layer' => $executionLayer,
             'latency_ms' => $latencyMs,
             'success_flag' => $success,
-            'metadata_json' => $metadata,
+            'metadata_json' => json_encode($metadata),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

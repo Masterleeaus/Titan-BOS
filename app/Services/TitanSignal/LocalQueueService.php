@@ -3,6 +3,7 @@
 namespace App\Services\TitanSignal;
 
 use App\Services\TitanRuntime\TelemetryService;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -16,14 +17,19 @@ class LocalQueueService
     /**
      * Queue a local signal for later reconciliation.
      * Capture -> store locally -> queue for sync. No cloud calls here.
+     * Expected signal keys: signal_type/type, payload/payload_json/data, action, origin_node, team_id.
      */
     public function enqueue(array $signal): int
     {
-        $payload = $signal['payload'] ?? $signal['payload_json'] ?? $signal;
+        $payload = $signal['payload'] ?? $signal['payload_json'] ?? $signal['data'] ?? null;
+        if ($payload === null) {
+            // Keep payload limited to business fields if provided structure is missing.
+            $payload = Arr::except($signal, ['type', 'signal_type', 'action', 'origin_node', 'team_id']);
+        }
 
         $id = DB::table('tz_local_signals')->insertGetId([
             'signal_type' => $signal['type'] ?? $signal['signal_type'] ?? null,
-            'payload_json' => $payload,
+            'payload_json' => json_encode($payload),
             'origin_node' => $signal['origin_node'] ?? null,
             'team_id' => $signal['team_id'] ?? null,
             'status' => 'pending',
@@ -32,12 +38,13 @@ class LocalQueueService
         ]);
 
         DB::table('tz_sync_queue')->insert([
-            'object_type' => $signal['type'] ?? $signal['signal_type'] ?? 'signal',
+            'object_type' => $signal['type'] ?? $signal['signal_type'] ?? 'unknown_signal',
+            // Maintain string object_id for sync queue compatibility while referencing the local signal id.
             'object_id' => (string) $id,
             'action' => $signal['action'] ?? 'capture',
             'status' => 'pending',
             'retry_count' => 0,
-            'payload_json' => $payload,
+            'payload_json' => json_encode($payload),
             'created_at' => now(),
         ]);
 

@@ -8,6 +8,8 @@ use Throwable;
 
 class FallbackResolver
 {
+    private const NANOS_PER_MILLI = 1_000_000;
+
     public function __construct(private ?TelemetryService $telemetry = null)
     {
         $this->telemetry = $telemetry ?? new TelemetryService();
@@ -31,12 +33,13 @@ class FallbackResolver
         foreach ($tiers as $tier) {
             $result = $this->attemptTier($tier['tier'], $tier['handler']);
             $attempts[] = $result['attempt'];
+            $latency = $result['attempt']['latency_ms'] ?? null;
 
             if ($result['attempt']['status'] === 'ok') {
                 $this->logRuntimeMeta('ai_fallback', [
                     'tier' => $tier['tier'],
                     'status' => 'ok',
-                    'latency_ms' => $result['attempt']['latency_ms'],
+                    'latency_ms' => $latency,
                 ]);
 
                 $this->telemetry->logProviderSelection(
@@ -45,7 +48,7 @@ class FallbackResolver
                     success: true,
                     metadata: [
                         'provider' => $tier['tier'],
-                        'latency_ms' => $result['attempt']['latency_ms'],
+                        'latency_ms' => $latency,
                     ]
                 );
 
@@ -74,7 +77,7 @@ class FallbackResolver
      */
     protected function callOnDevice(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'on-device AI not implemented', 'provider' => 'device'];
+        return ['ok' => false, 'error' => 'on-device AI not implemented'];
     }
 
     /**
@@ -82,7 +85,7 @@ class FallbackResolver
      */
     protected function callLocalHost(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'local AI host not implemented', 'provider' => 'local'];
+        return ['ok' => false, 'error' => 'local AI host not implemented'];
     }
 
     /**
@@ -90,7 +93,7 @@ class FallbackResolver
      */
     protected function callCloud(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'cloud AI not implemented', 'provider' => 'cloud'];
+        return ['ok' => false, 'error' => 'cloud AI not implemented'];
     }
 
     /**
@@ -109,7 +112,7 @@ class FallbackResolver
         try {
             $start = hrtime(true);
             $response = $callback();
-            $attempt['latency_ms'] = (int) ((hrtime(true) - $start) / 1_000_000);
+            $attempt['latency_ms'] = (int) ((hrtime(true) - $start) / self::NANOS_PER_MILLI);
 
             if (!empty($response['ok'])) {
                 $attempt['status'] = 'ok';
@@ -142,7 +145,7 @@ class FallbackResolver
             'execution_layer' => $value['tier'] ?? null,
             'latency_ms' => $value['latency_ms'] ?? null,
             'success_flag' => ($value['status'] ?? null) === 'ok',
-            'metadata_json' => $value,
+            'metadata_json' => json_encode($value),
             'created_at' => now(),
             'updated_at' => now(),
         ]);

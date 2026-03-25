@@ -48,6 +48,8 @@ class HandshakeService
     {
         $valid = !empty($payload['signature']);
 
+        // TODO: replace stub with cryptographic signature verification before production use.
+
         $this->telemetry->logExecution(
             subsystem: 'titan_federation',
             event: 'verify_signature',
@@ -61,30 +63,25 @@ class HandshakeService
 
     public function commitDelta(array $delta): array
     {
-        DB::table('tz_runtime_meta')->insert([
-            'subsystem' => 'titan_federation',
-            'event' => 'commit_delta',
-            'execution_layer' => 'device',
-            'success_flag' => true,
-            'metadata_json' => $delta,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $this->telemetry->logExecution(
+            subsystem: 'titan_federation',
+            event: 'commit_delta',
+            executionLayer: 'device',
+            success: true,
+            metadata: $delta
+        );
 
         return ['status' => 'committed', 'delta' => $delta];
     }
 
     public function resolveConflict(array $conflict): array
     {
-        DB::table('tz_runtime_meta')->insert([
-            'subsystem' => 'titan_federation',
-            'event' => 'conflict_detected',
-            'execution_layer' => 'device',
-            'success_flag' => false,
-            'metadata_json' => $conflict,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $this->telemetry->logFailure(
+            subsystem: 'titan_federation',
+            event: 'conflict_detected',
+            metadata: $conflict,
+            executionLayer: 'device'
+        );
 
         return ['status' => 'deferred', 'conflict' => $conflict];
     }
