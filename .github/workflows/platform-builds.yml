@@ -24,7 +24,7 @@ jobs:
         run: npm ci
 
       - name: Build for web
-        run: npm run build:web --if-present || true
+        run: npm run build:web || true
 
       - name: Upload web build artifacts
         uses: actions/upload-artifact@v5
@@ -49,7 +49,7 @@ jobs:
         run: npm ci
 
       - name: Build for iOS
-        run: npm run build:ios --if-present || true
+        run: npm run build:ios || true
 
       - name: Upload iOS build artifacts
         uses: actions/upload-artifact@v5
@@ -74,7 +74,7 @@ jobs:
         run: npm ci
 
       - name: Build for macOS
-        run: npm run build:macos --if-present || true
+        run: npm run build:macos || true
 
       - name: Upload macOS build artifacts
         uses: actions/upload-artifact@v5
@@ -99,7 +99,7 @@ jobs:
         run: npm ci
 
       - name: Build for Windows
-        run: npm run build:windows --if-present || true
+        run: npm run build:windows || true
 
       - name: Upload Windows build artifacts
         uses: actions/upload-artifact@v5
@@ -124,7 +124,7 @@ jobs:
         run: npm ci
 
       - name: Build for Linux
-        run: npm run build:linux --if-present || true
+        run: npm run build:linux || true
 
       - name: Upload Linux build artifacts
         uses: actions/upload-artifact@v5
@@ -149,7 +149,7 @@ jobs:
         run: npm ci
 
       - name: Build for WinUWP
-        run: npm run build:winuwp --if-present || true
+        run: npm run build:winuwp || true
 
       - name: Upload WinUWP build artifacts
         uses: actions/upload-artifact@v5
@@ -180,7 +180,7 @@ jobs:
         run: npm ci
 
       - name: Build for Android
-        run: npm run build:android --if-present || true
+        run: npm run build:android || true
 
       - name: Upload Android build artifacts
         uses: actions/upload-artifact@v5
@@ -208,7 +208,7 @@ jobs:
         run: npm ci
 
       - name: Build for Tizen
-        run: npm run build:tizen --if-present || true
+        run: npm run build:tizen || true
 
       - name: Upload Tizen build artifacts
         uses: actions/upload-artifact@v5
@@ -232,7 +232,7 @@ jobs:
         run: npm ci
 
       - name: Build for Flutter
-        run: npm run build:flutter --if-present || true
+        run: npm run build:flutter || true
 
       - name: Upload Flutter build artifacts
         uses: actions/upload-artifact@v5
@@ -257,7 +257,7 @@ jobs:
         run: npm ci
 
       - name: Build for tvOS
-        run: npm run build:tvos --if-present || true
+        run: npm run build:tvos || true
 
       - name: Upload tvOS build artifacts
         uses: actions/upload-artifact@v5
@@ -282,7 +282,7 @@ jobs:
         run: npm ci
 
       - name: Build for Aurora
-        run: npm run build:aurora --if-present || true
+        run: npm run build:aurora || true
 
       - name: Upload Aurora build artifacts
         uses: actions/upload-artifact@v5
@@ -307,7 +307,7 @@ jobs:
         run: npm ci
 
       - name: Build for HarmonyOS
-        run: npm run build:harmonyos --if-present || true
+        run: npm run build:harmonyos || true
 
       - name: Upload HarmonyOS build artifacts
         uses: actions/upload-artifact@v5

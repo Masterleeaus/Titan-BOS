@@ -116,7 +116,7 @@ jobs:
 
       - name: Build assets
         run: |
-          npm run build --if-present || true
+          npm run build || true
 
       - name: Deploy to Staging Server
         uses: appleboy/ssh-action@v1.2.2
@@ -130,7 +130,7 @@ jobs:
             git reset --hard origin/develop
             composer install --optimize-autoloader --no-dev || true
             npm ci --production || true
-            npm run build --if-present || true
+            npm run build || true
             php artisan migrate --force || true
             php artisan config:cache || true
             php artisan route:cache || true
@@ -164,7 +164,7 @@ jobs:
 
       - name: Build assets
         run: |
-          npm run build --if-present || true
+          npm run build || true
 
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v1.2.2
@@ -178,7 +178,7 @@ jobs:
             git reset --hard origin/main
             composer install --optimize-autoloader --no-dev || true
             npm ci --production || true
-            npm run build --if-present || true
+            npm run build || true
             php artisan migrate --force || true
             php artisan config:cache || true
             php artisan route:cache || true
