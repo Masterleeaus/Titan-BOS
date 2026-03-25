@@ -26,6 +26,7 @@ class AddAccountingSettingsColumnToBusinessTable extends Migration
     public function down()
     {
         Schema::table('business', function (Blueprint $table) {
+            $table->dropColumn('accounting_settings');
         });
     }
 }
