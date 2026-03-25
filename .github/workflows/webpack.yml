@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: |
         npm ci
-        npm run build || true
+        if npm run | grep -q "build"; then npm run build; else echo "Skipping build (script missing)"; fi

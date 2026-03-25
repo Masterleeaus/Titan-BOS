@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - id: check_frontend
         run: |
-          if [ -f package.json ]; then echo "has_frontend=true" >> $GITHUB_OUTPUT; else echo "has_frontend=false" >> $GITHUB_OUTPUT; fi
+          if [ -f package.json ] || [ -f package-lock.json ]; then echo "has_frontend=true" >> $GITHUB_OUTPUT; else echo "has_frontend=false" >> $GITHUB_OUTPUT; fi
       - id: check_backend
         run: |
           if [ -f composer.json ]; then echo "has_backend=true" >> $GITHUB_OUTPUT; else echo "has_backend=false" >> $GITHUB_OUTPUT; fi

@@ -51,7 +51,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          if [ ! -d vendor ]; then composer install --prefer-dist --no-progress --no-suggest --ignore-platform-req=ext-redis || true; fi
+          composer install --prefer-dist --no-progress --no-suggest --ignore-platform-req=ext-redis || true
           npm ci || true
 
       - name: Prepare the application
@@ -68,7 +68,7 @@ jobs:
 
       - name: Create Database
         run: |
-          mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS aiplatform_test;" || true
+          if mysqladmin ping -h 127.0.0.1 -u root -proot --silent; then mysql -h 127.0.0.1 -u root -proot -e "CREATE DATABASE IF NOT EXISTS aiplatform_test;"; else echo "MySQL not available, skipping DB creation"; fi
 
       - name: Run Migrations
         run: |
@@ -116,7 +116,7 @@ jobs:
 
       - name: Build assets
         run: |
-          npm run build || true
+          if npm run | grep -q "build"; then npm run build; else echo "Skipping build (script missing)"; fi
 
       - name: Deploy to Staging Server
         uses: appleboy/ssh-action@v1.2.2
@@ -130,13 +130,13 @@ jobs:
             git reset --hard origin/develop
             composer install --optimize-autoloader --no-dev || true
             npm ci --production || true
-            npm run build || true
-            php artisan migrate --force || true
-            php artisan config:cache || true
-            php artisan route:cache || true
-            php artisan view:cache || true
-            php artisan queue:restart || true
-            sudo systemctl reload php8.3-fpm || true
+            if npm run | grep -q "build"; then npm run build; else echo "Skipping build (script missing)"; fi
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan queue:restart
+            sudo systemctl reload php8.3-fpm
 
   # Deploy to production
   deploy-production:
@@ -164,7 +164,7 @@ jobs:
 
       - name: Build assets
         run: |
-          npm run build || true
+          if npm run | grep -q "build"; then npm run build; else echo "Skipping build (script missing)"; fi
 
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v1.2.2
@@ -178,10 +178,10 @@ jobs:
             git reset --hard origin/main
             composer install --optimize-autoloader --no-dev || true
             npm ci --production || true
-            npm run build || true
-            php artisan migrate --force || true
-            php artisan config:cache || true
-            php artisan route:cache || true
-            php artisan view:cache || true
-            php artisan queue:restart || true
-            sudo systemctl reload php8.3-fpm || true
+            if npm run | grep -q "build"; then npm run build; else echo "Skipping build (script missing)"; fi
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan queue:restart
+            sudo systemctl reload php8.3-fpm
