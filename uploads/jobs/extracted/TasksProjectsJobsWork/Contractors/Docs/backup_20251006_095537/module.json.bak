@@ -1,0 +1,21 @@
+{
+  "name": "Subcontractor",
+  "alias": "subcontractor",
+  "description": "Subcontractor management (nWidart module) with AI-assisted creation.",
+  "keywords": [
+    "subcontractor",
+    "vendors",
+    "nwidart"
+  ],
+  "active": 1,
+  "order": 2,
+  "providers": [
+    "Modules\\Article\\Providers\\ArticleServiceProvider",
+    "Modules\\Subcontractor\\Providers\\ModuleServiceProvider"
+  ],
+  "aliases": {},
+  "files": [
+    "start.php"
+  ],
+  "priority": 0
+}

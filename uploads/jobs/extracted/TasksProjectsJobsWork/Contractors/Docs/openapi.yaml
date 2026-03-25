@@ -1,0 +1,23 @@
+openapi: 3.0.3
+info:
+  title: Subcontractor Module API
+  version: 1.0.0
+paths:
+  /api/subcontractor/subcontractors:
+    get:
+      summary: List subcontractors
+      responses:
+        '200':
+          description: OK
+  /api/subcontractor/subcontractors/{id}:
+    get:
+      summary: Get subcontractor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK

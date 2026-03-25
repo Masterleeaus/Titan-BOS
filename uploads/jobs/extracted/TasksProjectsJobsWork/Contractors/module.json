@@ -1,0 +1,21 @@
+{
+  "name": "Contractors",
+  "alias": "contractors",
+  "description": "Manage contractors, skills, licenses, availability, and assignments; bridged with Work Orders.",
+  "keywords": [
+    "subcontractor",
+    "vendors",
+    "nwidart"
+  ],
+  "active": 1,
+  "order": 2,
+  "providers": [
+    "Modules\\Contractors\\Providers\\ContractorsServiceProvider",
+    "Modules\\Contractors\\Providers\\ContractorsEventServiceProvider"
+  ],
+  "aliases": {},
+  "files": [
+    "start.php"
+  ],
+  "priority": 0
+}

@@ -1,0 +1,16 @@
+{
+  "name": "worksuite/contractors",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Modules\\Contractors\\": ""
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Modules\\Contractors\\Providers\\ContractorsServiceProvider"
+      ]
+    }
+  }
+}
