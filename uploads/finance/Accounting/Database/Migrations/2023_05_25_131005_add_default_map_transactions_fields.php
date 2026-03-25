@@ -27,7 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('business_locations', function (Blueprint $table) {
-
+            $table->dropColumn('accounting_default_map');
         });
     }
 };
