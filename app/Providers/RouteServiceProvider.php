@@ -28,6 +28,12 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware([
                 'web',  ViewSharedMiddleware::class, NewExtensionInstalled::class,
             ])->group(base_path('routes/web.php'));
+
+            if (file_exists(base_path('routes/worksuite.php'))) {
+                Route::middleware([
+                    'web', 'auth', ViewSharedMiddleware::class,
+                ])->group(base_path('routes/worksuite.php'));
+            }
         });
     }
 

@@ -1,0 +1,93 @@
+# WorkCore — Conflicts Resolved
+
+## Conflict 1: `dashboard.user.team.*` route namespace collision
+
+**Issue:** The existing host panel (`routes/panel.php`) defines `dashboard.user.team.*`
+for the AI collaboration team feature (TeamController — invitations, workspace members).
+WorkCore's HR/Staff module also needs `dashboard.user.team.*`.
+
+**Resolution:** WorkCore HR/Team routes are prefixed `bos-team`:
+- URL: `/dashboard/user/bos-team`
+- Route name: `dashboard.user.bos-team.*`
+- Menu items reference `bos-team` routes
+
+**Impact:** No breaking change. Menu labels show "Team" visually but the route name is
+`bos-team`. If the AI collaboration team feature is eventually retired or merged with the
+BOS team module, rename to `dashboard.user.team.*` at that point.
+
+---
+
+## Conflict 2: WorkSuite `leads` vs. host `crm_leads` tables
+
+**Issue:** WorkSuite has a `leads` table (from its CRM). Titan-BOS has `crm_leads`
+(different schema, different controller). Both represent lead records but with different
+column layouts.
+
+**Resolution:**
+- WorkSuite Lead model → `App\Models\WorkSuite\Crm\Lead` → table `leads`
+- Host CrmLead model → `App\Models\Crm\CrmLead` → table `crm_leads`
+- These are independent tables. Both can exist.
+- WorkSuite migration creates `leads` table; host migration creates `crm_leads`.
+- Menu surface: Host CRM `leads` → `dashboard.crm.leads.*`. WorkCore leads → `dashboard.user.leads.*`.
+
+**Deferred:** In a later phase, decide whether to merge these into a single lead source
+of truth or keep both (WorkSuite for operational CRM, host CRM for pipeline management).
+
+---
+
+## Conflict 3: WorkSuite `deals` vs. host `crm_deals`
+
+Same pattern as leads conflict. Independent tables, different schemas, different controllers.
+
+**Resolution:** Same as conflict 2 — keep both, deferred merge decision.
+
+---
+
+## Conflict 4: Tenancy column (`company_id` vs `user_id`)
+
+**Issue:** WorkSuite models scope by `company_id`. Host CRM models scope by `user_id`.
+
+**Resolution:**
+- `config/worksuite.php` exposes `worksuite.tenancy.tenant_column` (env: `WORKSUITE_TENANT_COLUMN`).
+- Default is `company_id` for compatibility with WorkSuite code.
+- When wiring models, add a boot-time global scope that maps `company_id` from the
+  authenticated user's primary company (or use `user_id` directly by changing the env var).
+- No migration schema changes required — the resolution is at the query layer.
+
+---
+
+## Conflict 5: WorkSuite `User` references
+
+WorkSuite models reference `App\Models\User` for `belongsTo` relationships. The host
+`User` model is at `App\Models\User` — same path. No conflict; the relationship works
+as-is because both codebases share the same Laravel `users` table.
+
+---
+
+## Conflict 6: `team_id` column on users
+
+WorkSuite config references `team_id` (legacy column). The host user table has `team_id`
+(added in migration `2024_01_30_063632`). No conflict; the column exists and WorkSuite
+can reference it. The `config/worksuite.php` `legacy_team_column` setting documents this.
+
+---
+
+## Not a conflict: Host Finance vs. WorkCore Money
+
+Host Finance (`app/Http/Controllers/Finance/`, `app/Models/Finance/`) handles:
+- Subscription plans
+- Payment gateways
+- Platform token billing
+
+WorkCore Money (`dashboard.user.money.*`) handles:
+- Client invoices, estimates, expenses, credits (business operations)
+
+These are completely separate concerns. No collision.
+
+---
+
+## Not a conflict: CRM module
+
+Host `dashboard.crm.*` (native Titan CRM) and WorkCore `dashboard.user.customers.*` /
+`dashboard.user.leads.*` serve different surfaces. Both can coexist. Long-term, the
+native CRM may be replaced or unified with WorkCore's CRM domain.

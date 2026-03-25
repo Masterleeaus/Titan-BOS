@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'cleaning' => [
+        'name' => 'Cleaning',
+        'labels' => [
+            'clients' => 'Customers',
+            'client' => 'Customer',
+            'projects' => 'Jobs',
+            'project' => 'Job',
+            'tasks' => 'Cleaning Checklist',
+            'task' => 'Checklist Item',
+            'employees' => 'Cleaners',
+            'employee' => 'Cleaner',
+            'attendance' => 'Shift Log',
+            'shiftRoster' => 'Availability',
+            'designation' => 'Role',
+            'department' => 'Team',
+            'tickets' => 'Service Requests',
+            'ticket' => 'Service Request',
+            'finance' => 'Money',
+            'timeLogs' => 'Time on Job',
+            'knowledgebase' => 'Playbooks',
+            'contracts' => 'Service Agreements',
+            'messages' => 'Team Chat',
+            'calendar' => 'Schedule & Dispatch',
+            'reports' => 'Insights',
+            'followup' => 'Follow-Up',
+        ],
+        'menu' => [
+            'primary' => [
+                'customers',
+                'leads',
+                'followups',
+                'jobs',
+                'schedule-dispatch',
+                'cleaning-checklist',
+                'team',
+                'money',
+                'service-requests',
+                'playbooks',
+                'insights',
+            ],
+        ],
+    ],
+];

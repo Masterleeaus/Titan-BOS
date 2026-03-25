@@ -215,6 +215,7 @@ return [
          * Laravel Json Localization Manager
          */
         App\Domains\Marketplace\MarketplaceServiceProvider::class,
+        App\Providers\WorkSuiteServiceProvider::class,
         Elseyyid\LaravelJsonLocationsManager\Providers\LaravelJsonLocationsManagerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Igaster\LaravelTheme\themeServiceProvider::class,
