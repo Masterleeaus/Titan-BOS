@@ -25,3 +25,26 @@
 - State **AI execution order** explicitly: on-device/native → local/Ollama → cloud (last resort, auditable).
 - When mentioning bridges (Web3, identity, payments), label them **optional extensions**, not core.
 - Mark features as **implemented / in transition / target** to avoid overstating current capabilities.
+
+## Runtime Compliance Report (device-first / offline-first)
+- **Implemented:**  
+  - Migration stubs for local/federated execution tables: `tz_local_signals`, `tz_sync_queue`, `tz_runtime_meta`.  
+  - Local queue service stub (`app/Services/TitanSignal/LocalQueueService.php`) with enqueue/pull/logging.  
+  - AI fallback resolver stub (`app/Services/TitanAI/FallbackResolver.php`) enforcing device → local/Ollama → cloud order with runtime meta logging.  
+  - Service worker scaffold (`public/sw.js`) for basic offline caching.  
+  - IndexedDB bootstrap (`resources/js/titan/indexeddb.js`) for local signals/runtime meta.
+- **Missing (to implement):**  
+  - Actual on-device/native AI execution path.  
+  - Local/Ollama host invocation and health/availability checks.  
+  - Cloud AI integration wiring into resolver.  
+  - Reconciliation engine that drains local DB + IndexedDB into server-side sync with conflict resolution.
+- **Stubbed:**  
+  - AI fallback resolver and local queue service intentionally return placeholder responses; runtime meta logging is active.  
+  - IndexedDB helpers create stores but do not wire into UI flows yet.
+- **Deferred:**  
+  - Namespace/package renames for legacy MagicAI/AIPlatform identifiers.  
+  - Full sync reconciliation policies, conflict resolution strategies, and UI for signal queue inspection.
+
+## Compatibility Status
+- Documentation aligned  
+- Runtime partially aligned (infrastructure stubs added; execution wiring pending)  
