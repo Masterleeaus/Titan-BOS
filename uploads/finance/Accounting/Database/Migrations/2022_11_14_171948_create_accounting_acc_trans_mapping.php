@@ -33,6 +33,6 @@ class CreateAccountingAccTransMapping extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounting_acc_trans_mapping');
+        Schema::dropIfExists('accounting_acc_trans_mappings');
     }
 }
