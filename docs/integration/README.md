@@ -34,6 +34,10 @@ graph TD
 ```javascript
 async function executeWithFallback(query, context) {
   const attempts = [];
+  const validation = validateInput(query, context);
+  if (!validation.ok) {
+    return { ok: false, error: 'Invalid input', details: validation.error, attempts };
+  }
 
   // 1) On-device/native path (preferred)
   const localResult = await tryOnDevice(query, context);
