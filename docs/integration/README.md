@@ -32,6 +32,13 @@ graph TD
 
 ### AI execution
 ```javascript
+// Placeholder helpers for illustration; replace with real implementations.
+const validateInput = (query, context) =>
+  query ? { ok: true } : { ok: false, error: 'query cannot be empty' };
+const tryOnDeviceAI = async (query, context) => ({ ok: false, error: 'on-device AI unavailable' });
+const tryLocalHostAI = async (query, context) => ({ ok: false, error: 'local host unavailable' });
+const callCloudAI = async (query, context, options) => ({ ok: false, error: 'cloud AI unavailable' });
+
 async function executeAIWithFallback(query, context) {
   const attempts = [];
   const validation = validateInput(query, context);
