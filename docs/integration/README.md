@@ -36,7 +36,7 @@ async function executeWithFallback(query, context) {
   const attempts = [];
   const validation = validateInput(query, context);
   if (!validation.ok) {
-    return { ok: false, error: 'Invalid input', details: validation.error };
+    return { ok: false, error: `Invalid input: ${validation.error}` };
   }
 
   // 1) On-device/native path (preferred)
@@ -55,7 +55,7 @@ async function executeWithFallback(query, context) {
 
   return {
     ok: false,
-    error: 'All AI execution tiers failed',
+    error: 'All AI execution tiers failed. Check device AI availability, local host connectivity, and cloud service status.',
     attempts,
     cloudError: cloudResult?.error ?? 'cloud unavailable',
   };
