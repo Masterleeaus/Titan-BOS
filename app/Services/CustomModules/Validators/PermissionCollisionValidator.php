@@ -4,6 +4,7 @@ namespace App\Services\CustomModules\Validators;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class PermissionCollisionValidator
 {
@@ -38,8 +39,9 @@ class PermissionCollisionValidator
                 }
                 
                 // Check if permission already exists from a DIFFERENT module
+                $keyColumn = Schema::hasColumn('permissions', 'permission_key') ? 'permission_key' : 'name';
                 $existing = DB::table('permissions')
-                    ->where('permission_key', $permKey)
+                    ->where($keyColumn, $permKey)
                     ->first();
                 
                 if ($existing && $existing->module !== $moduleName) {

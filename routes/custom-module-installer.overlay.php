@@ -2,24 +2,25 @@
 
 use App\Http\Controllers\CustomModuleController;
 
-Route::resource('custom-modules', CustomModuleController::class);
+Route::middleware(['auth', 'superadmin'])->group(function () {
+    Route::resource('custom-modules', CustomModuleController::class);
 
-Route::post('custom-modules/analyze', [CustomModuleController::class, 'analyze'])
-    ->name('custom-modules.analyze');
+    Route::post('custom-modules/analyze', [CustomModuleController::class, 'analyze'])
+        ->name('custom-modules.analyze');
 
-Route::post('custom-modules/safe-fix', [CustomModuleController::class, 'safeFix'])
-    ->name('custom-modules.safe-fix');
+    Route::post('custom-modules/safe-fix', [CustomModuleController::class, 'safeFix'])
+        ->name('custom-modules.safe-fix');
 
-Route::post('custom-modules/export-json', [CustomModuleController::class, 'exportJson'])
-    ->name('custom-modules.export-json');
+    Route::post('custom-modules/export-json', [CustomModuleController::class, 'exportJson'])
+        ->name('custom-modules.export-json');
 
-Route::post('custom-modules/analyze-download', [CustomModuleController::class, 'downloadAnalysis'])
-    ->name('custom-modules.analyze_download');
+    Route::post('custom-modules/analyze-download', [CustomModuleController::class, 'downloadAnalysis'])
+        ->name('custom-modules.analyze_download');
 
-// NEW: Rollback route for failed installations
-Route::post('custom-modules/{install}/rollback', [CustomModuleController::class, 'rollback'])
-    ->name('custom-modules.rollback')
-    ->middleware('superadmin');
+    // Rollback route for failed installations
+    Route::post('custom-modules/{install}/rollback', [CustomModuleController::class, 'rollback'])
+        ->name('custom-modules.rollback');
+});
 
 
 

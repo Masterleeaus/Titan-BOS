@@ -10,7 +10,7 @@
                     <div class="custom-control custom-switch">
                         <input type="checkbox"
                                @if ($setting->status == 'active') checked @endif
-                               @if($setting->module_name == 'settings') @endif
+                               @if($setting->module_name == 'settings') disabled @endif
                                class="cursor-pointer custom-control-input change-module-setting"
                                id="module-{{ $setting->id }}"
                                data-setting-id="{{ $setting->id }}"

@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('custom_module_install_logs')) {
+            return;
+        }
+
         Schema::create('custom_module_install_logs', function (Blueprint $table) {
             $table->id();
             $table->string('file_name')->nullable();
