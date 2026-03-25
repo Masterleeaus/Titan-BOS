@@ -182,9 +182,13 @@ class InstallController extends Controller
             ];
 
             return redirect()->back()->with(['status' => $output]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
-            exit($e->getMessage());
+            $output = ['success' => 0,
+                'msg' => $e->getMessage(),
+            ];
+
+            return redirect()->back()->with(['status' => $output]);
         }
     }
 }
