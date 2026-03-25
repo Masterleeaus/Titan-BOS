@@ -932,6 +932,9 @@ use App\Http\Controllers\Crm\CrmContactController;
 use App\Http\Controllers\Crm\CrmDashboardController;
 use App\Http\Controllers\Crm\CrmDealController;
 use App\Http\Controllers\Crm\CrmLeadController;
+use App\Http\Controllers\Crm\CrmLeadSettingsController;
+use App\Http\Controllers\Crm\CrmPipelineController;
+use App\Http\Controllers\Crm\CrmTagController;
 
 Route::middleware(['auth', 'updateUserActivity'])
     ->prefix('dashboard/crm')
@@ -961,4 +964,45 @@ Route::middleware(['auth', 'updateUserActivity'])
         Route::resource('leads', CrmLeadController::class);
         Route::patch('leads/{lead}/move-status', [CrmLeadController::class, 'moveStatus'])->name('leads.move-status');
         Route::post('leads/{lead}/convert', [CrmLeadController::class, 'convert'])->name('leads.convert');
+
+        // Pipelines & Stages
+        Route::resource('pipelines', CrmPipelineController::class);
+        Route::post('pipelines/reorder', [CrmPipelineController::class, 'reorder'])->name('pipelines.reorder');
+
+        // CRM Settings — Lead Statuses
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('statuses', [CrmLeadSettingsController::class, 'statusesIndex'])->name('statuses');
+            Route::post('statuses', [CrmLeadSettingsController::class, 'statusStore'])->name('statuses.store');
+            Route::put('statuses/{status}', [CrmLeadSettingsController::class, 'statusUpdate'])->name('statuses.update');
+            Route::delete('statuses/{status}', [CrmLeadSettingsController::class, 'statusDestroy'])->name('statuses.destroy');
+            Route::post('statuses/reorder', [CrmLeadSettingsController::class, 'statusReorder'])->name('statuses.reorder');
+
+            // Lead Sources
+            Route::get('sources', [CrmLeadSettingsController::class, 'sourcesIndex'])->name('sources');
+            Route::post('sources', [CrmLeadSettingsController::class, 'sourceStore'])->name('sources.store');
+            Route::put('sources/{source}', [CrmLeadSettingsController::class, 'sourceUpdate'])->name('sources.update');
+            Route::delete('sources/{source}', [CrmLeadSettingsController::class, 'sourceDestroy'])->name('sources.destroy');
+
+            // Tags
+            Route::get('tags', [CrmTagController::class, 'index'])->name('tags');
+            Route::post('tags', [CrmTagController::class, 'store'])->name('tags.store');
+            Route::put('tags/{tag}', [CrmTagController::class, 'update'])->name('tags.update');
+            Route::delete('tags/{tag}', [CrmTagController::class, 'destroy'])->name('tags.destroy');
+            Route::get('tags/search', [CrmTagController::class, 'search'])->name('tags.search');
+        });
+    });
+
+// ─────────────────────────────────────────────
+//  TITAN BOS — Tasks Module
+// ─────────────────────────────────────────────
+use App\Http\Controllers\Tasks\TaskController;
+
+Route::middleware(['auth', 'updateUserActivity'])
+    ->prefix('dashboard/tasks')
+    ->name('dashboard.tasks.')
+    ->group(function () {
+        Route::resource('/', TaskController::class)->parameters(['' => 'task']);
+        Route::patch('{task}/complete', [TaskController::class, 'complete'])->name('complete');
+        Route::post('ai-parse', [TaskController::class, 'aiParse'])->name('ai-parse');
+        Route::post('{task}/comments', [TaskController::class, 'storeComment'])->name('comments.store');
     });
