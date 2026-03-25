@@ -127,14 +127,14 @@ class CrmPipelineController extends Controller
             foreach (($validated['stages'] ?? []) as $i => $stageData) {
                 if (!empty($stageData['delete'])) {
                     if (!empty($stageData['id'])) {
-                        CrmPipelineStage::find($stageData['id'])?->delete();
+                        $pipeline->stages()->whereKey($stageData['id'])->delete();
                     }
                     continue;
                 }
 
                 if (!empty($stageData['id'])) {
-                    $stage = CrmPipelineStage::find($stageData['id']);
-                    if ($stage && $stage->pipeline_id === $pipeline->id) {
+                    $stage = $pipeline->stages()->whereKey($stageData['id'])->first();
+                    if ($stage) {
                         $stage->update([
                             'name'        => $stageData['name'],
                             'color'       => $stageData['color'] ?? $stage->color,
