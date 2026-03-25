@@ -131,6 +131,16 @@ class BosMenuSeeder extends Seeder
                 'is_active'  => true,
                 'type'       => 'item',
             ],
+            [
+                'parent_key' => 'crm',
+                'key'        => 'crm_leads',
+                'route'      => 'dashboard.crm.leads.index',
+                'label'      => 'Leads',
+                'icon'       => 'tabler-user-plus',
+                'order'      => 5,
+                'is_active'  => true,
+                'type'       => 'item',
+            ],
         ];
     }
 }

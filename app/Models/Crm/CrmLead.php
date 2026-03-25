@@ -5,6 +5,7 @@ namespace App\Models\Crm;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CrmLead extends Model
@@ -73,6 +74,11 @@ class CrmLead extends Model
     public function convertedDeal(): BelongsTo
     {
         return $this->belongsTo(CrmDeal::class, 'converted_to_deal_id');
+    }
+
+    public function tags(): MorphMany
+    {
+        return $this->morphMany(CrmTaggable::class, 'taggable');
     }
 
     public function scopeForUser($query, int $userId)

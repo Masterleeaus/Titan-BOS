@@ -942,7 +942,7 @@ Route::middleware(['auth', 'updateUserActivity'])
     ->group(function () {
 
         // CRM home dashboard
-        Route::get('/', CrmDashboardController::class)->name('dashboard');
+        Route::get('/', [CrmDashboardController::class, 'index'])->name('dashboard');
 
         // Contacts
         Route::resource('contacts', CrmContactController::class);
