@@ -32,7 +32,7 @@ graph TD
 
 ### AI execution
 ```javascript
-async function executeWithFallback(query, context) {
+async function executeAIWithFallback(query, context) {
   const attempts = [];
   const validation = validateInput(query, context);
   if (!validation.ok) {
@@ -40,14 +40,14 @@ async function executeWithFallback(query, context) {
   }
 
   // 1) On-device/native path (preferred)
-  const localResult = await tryOnDevice(query, context);
+  const localResult = await tryOnDeviceAI(query, context);
   if (localResult?.ok) return { ...localResult, attempts };
   attempts.push({ tier: 'on-device', error: localResult?.error ?? 'unavailable' });
 
   // 2) Local/Ollama host
-  const edgeResult = await tryLocalHost(query, context);
-  if (edgeResult?.ok) return { ...edgeResult, attempts };
-  attempts.push({ tier: 'local-host', error: edgeResult?.error ?? 'unavailable' });
+  const localHostResult = await tryLocalHostAI(query, context);
+  if (localHostResult?.ok) return { ...localHostResult, attempts };
+  attempts.push({ tier: 'local-host', error: localHostResult?.error ?? 'unavailable' });
 
   // 3) Cloud fallback (audited)
   const cloudResult = await callCloudAI(query, context, { audit: true, notifyUser: true });
