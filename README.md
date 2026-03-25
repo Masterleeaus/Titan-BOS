@@ -37,8 +37,8 @@ Titan Zero BOS is a business operating system built for device-first, privacy-fi
 
 ## Getting started (developer)
 ```bash
-git clone https://github.com/Masterleeaus/Titan-BOS.git titan-zero-bos
-cd titan-zero-bos
+git clone https://github.com/Masterleeaus/Titan-BOS.git Titan-BOS
+cd Titan-BOS
 cp .env.example .env    # set APP_NAME, DB credentials, API keys
 composer install
 npm install
