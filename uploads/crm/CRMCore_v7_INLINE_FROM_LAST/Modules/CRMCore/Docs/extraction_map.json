@@ -1,0 +1,862 @@
+[
+  {
+    "source": "vite.config.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/vite.config.js",
+    "category": "other"
+  },
+  {
+    "source": "package.json",
+    "proposed_destination": "Modules/CRMCore/_unmapped/package.json",
+    "category": "other"
+  },
+  {
+    "source": "module.json",
+    "proposed_destination": "Modules/CRMCore/_unmapped/module.json",
+    "category": "other"
+  },
+  {
+    "source": "composer.json",
+    "proposed_destination": "composer.json (merge into host or module context)",
+    "category": "composer"
+  },
+  {
+    "source": "database/migrations/2025_05_09_150552_create_customer_notification_logs_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_05_09_150552_create_customer_notification_logs_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_04_010228_create_task_statuses_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_04_010228_create_task_statuses_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_232159_create_deal_stages_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_232159_create_deal_stages_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_232125_create_deal_pipelines_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_232125_create_deal_pipelines_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_223109_create_lead_sources_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_223109_create_lead_sources_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/.gitkeep",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_04_010301_create_tasks_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_04_010301_create_tasks_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_07_10_001724_add_project_fields_to_crm_tasks_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_07_10_001724_add_project_fields_to_crm_tasks_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_05_12_000717_create_contacts_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_05_12_000717_create_contacts_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_232215_create_deals_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_232215_create_deals_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_06_021142_add_converted_to_deal_id_in_leads.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_06_021142_add_converted_to_deal_id_in_leads.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_04_010248_create_task_priorities_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_04_010248_create_task_priorities_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_08_23_150826_create_customers_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_08_23_150826_create_customers_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_223123_create_leads_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_223123_create_leads_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_08_11_203157_add_is_active_to_deal_pipelines_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_08_11_203157_add_is_active_to_deal_pipelines_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_05_12_000627_create_companies_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_05_12_000627_create_companies_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_06_03_223043_create_lead_statuses_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_06_03_223043_create_lead_statuses_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/migrations/2025_08_23_150821_create_customer_groups_table.php",
+    "proposed_destination": "Modules/CRMCore/Database/Migrations/2025_08_23_150821_create_customer_groups_table.php",
+    "category": "migrations"
+  },
+  {
+    "source": "database/seeders/CustomerSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/CustomerSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/CRMCoreDatabaseSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/CRMCoreDatabaseSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/SampleDataSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/SampleDataSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/ContactSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/ContactSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/TaskSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/TaskSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/CompanySeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/CompanySeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/DealSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/DealSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/LeadSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/LeadSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/CustomerGroupSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/CustomerGroupSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/seeders/CRMCoreSettingsSeeder.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/seeders/CRMCoreSettingsSeeder.php",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/LeadFactory.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/LeadFactory.php",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/CompanyFactory.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/CompanyFactory.php",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/TaskFactory.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/TaskFactory.php",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/ContactFactory.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/ContactFactory.php",
+    "category": "other"
+  },
+  {
+    "source": "database/factories/DealFactory.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/database/factories/DealFactory.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Notifications/CustomerCustomNotification.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Notifications/CustomerCustomNotification.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Notifications/TaskAssignedNotification.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Notifications/TaskAssignedNotification.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Notifications/TestEmail.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Notifications/TestEmail.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Notifications/Announcement.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Notifications/Announcement.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Settings/CRMCoreSettings.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Settings/CRMCoreSettings.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Services/CRMNotificationService.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Services/CRMNotificationService.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Services/CRMCoreSettingsHandler.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Services/CRMCoreSettingsHandler.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Services/CRMCodeGeneratorService.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Services/CRMCodeGeneratorService.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Services/CRMValidationService.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Services/CRMValidationService.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Services/BillingEntityDetector.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Services/BillingEntityDetector.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Controllers/TaskPriorityController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/TaskPriorityController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/DealPipelineController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/DealPipelineController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/LeadController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/LeadController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/CompanyController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/CompanyController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/TaskController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/TaskController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/DealStageController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/DealStageController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/ContactController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/ContactController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/.gitkeep",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/LeadSourceController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/LeadSourceController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/DealController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/DealController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/CustomerController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/CustomerController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/LeadStatusController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/LeadStatusController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/TaskStatusController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/TaskStatusController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/CustomerGroupController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/CustomerGroupController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/DashboardController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/DashboardController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/CRMCoreSettingsController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/CRMCoreSettingsController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/BaseApiController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/BaseApiController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/V1/LeadController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/V1/LeadController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/V1/CompanyController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/V1/CompanyController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/V1/ContactController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/V1/ContactController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/V1/DealController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/V1/DealController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Controllers/Api/V1/CustomerController.php",
+    "proposed_destination": "Modules/CRMCore/Http/Controllers/Api/V1/CustomerController.php",
+    "category": "controllers"
+  },
+  {
+    "source": "app/Http/Resources/LeadResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/LeadResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Resources/CustomerResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/CustomerResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Resources/TaskResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/TaskResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Resources/DealResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/DealResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Resources/CompanyResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/CompanyResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Http/Resources/ContactResource.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Http/Resources/ContactResource.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Models/Task.php",
+    "proposed_destination": "Modules/CRMCore/Models/Task.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/DealStage.php",
+    "proposed_destination": "Modules/CRMCore/Models/DealStage.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/Deal.php",
+    "proposed_destination": "Modules/CRMCore/Models/Deal.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/LeadSource.php",
+    "proposed_destination": "Modules/CRMCore/Models/LeadSource.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/CustomerNotificationLog.php",
+    "proposed_destination": "Modules/CRMCore/Models/CustomerNotificationLog.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/Company.php",
+    "proposed_destination": "Modules/CRMCore/Models/Company.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/LeadStatus.php",
+    "proposed_destination": "Modules/CRMCore/Models/LeadStatus.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/TaskPriority.php",
+    "proposed_destination": "Modules/CRMCore/Models/TaskPriority.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/Contact.php",
+    "proposed_destination": "Modules/CRMCore/Models/Contact.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/Lead.php",
+    "proposed_destination": "Modules/CRMCore/Models/Lead.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/Customer.php",
+    "proposed_destination": "Modules/CRMCore/Models/Customer.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/TaskStatus.php",
+    "proposed_destination": "Modules/CRMCore/Models/TaskStatus.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/CustomerGroup.php",
+    "proposed_destination": "Modules/CRMCore/Models/CustomerGroup.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Models/DealPipeline.php",
+    "proposed_destination": "Modules/CRMCore/Models/DealPipeline.php",
+    "category": "models"
+  },
+  {
+    "source": "app/Providers/CRMCoreServiceProvider.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Providers/CRMCoreServiceProvider.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Providers/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Providers/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "app/Providers/EventServiceProvider.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Providers/EventServiceProvider.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Providers/RouteServiceProvider.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Providers/RouteServiceProvider.php",
+    "category": "other"
+  },
+  {
+    "source": "app/Traits/HasCRMCode.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/app/Traits/HasCRMCode.php",
+    "category": "other"
+  },
+  {
+    "source": "config/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/config/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "config/config.php",
+    "proposed_destination": "Modules/CRMCore/_unmapped/config/config.php",
+    "category": "other"
+  },
+  {
+    "source": "resources/lang/en.json",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/lang/en.json",
+    "category": "other"
+  },
+  {
+    "source": "resources/menu/verticalMenu.json",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/menu/verticalMenu.json",
+    "category": "other"
+  },
+  {
+    "source": "resources/views/customers/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/customers/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/customers/edit.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/customers/edit.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/customers/create.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/customers/create.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/customers/show.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/customers/show.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/tasks/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/tasks/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/tasks/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/tasks/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/lead_statuses/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/lead_statuses/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/lead_statuses/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/lead_statuses/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/leads/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/leads/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/leads/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/leads/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/leads/_convert_lead_modal.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/leads/_convert_lead_modal.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/leads/show.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/leads/show.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/contacts/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/contacts/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/contacts/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/contacts/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/contacts/edit.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/contacts/edit.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/contacts/create.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/contacts/create.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/contacts/show.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/contacts/show.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deals/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deals/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deals/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deals/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deals/show.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deals/show.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deal_stages/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deal_stages/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deal_stages/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deal_stages/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/customer-groups/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/customer-groups/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/dashboard/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/dashboard/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/task_priorities/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/task_priorities/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/task_priorities/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/task_priorities/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deal_pipelines/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deal_pipelines/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/deal_pipelines/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/deal_pipelines/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/lead_sources/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/lead_sources/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/lead_sources/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/lead_sources/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/partials/_activity_log_changes.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/partials/_activity_log_changes.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/companies/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/companies/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/companies/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/companies/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/companies/edit.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/companies/edit.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/companies/create.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/companies/create.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/companies/show.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/companies/show.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/task_statuses/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/task_statuses/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/task_statuses/_form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/task_statuses/_form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/crm-settings/form.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/crm-settings/form.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/views/crm-settings/index.blade.php",
+    "proposed_destination": "Modules/CRMCore/Resources/views/crm-settings/index.blade.php",
+    "category": "views"
+  },
+  {
+    "source": "resources/assets/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/deals-index.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/deals-index.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/leads-list.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/leads-list.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/companies-create.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/companies-create.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/lead-show-interactions.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/lead-show-interactions.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/contact-show-interactions.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/contact-show-interactions.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-task-statuses.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-task-statuses.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-deal-pipelines.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-deal-pipelines.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/customer-groups.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/customer-groups.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/contacts-list.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/contacts-list.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/customers.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/customers.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/customers-edit.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/customers-edit.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-lead-sources.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-lead-sources.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/companies-list.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/companies-list.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/customers-create.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/customers-create.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/deal-show-interactions.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/deal-show-interactions.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/contacts-form.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/contacts-form.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/dashboard.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/dashboard.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/tasks-index.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/tasks-index.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-lead-statuses.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-lead-statuses.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/customers-show.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/customers-show.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/app.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/app.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-deal-stages.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-deal-stages.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/settings-task-priorities.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/settings-task-priorities.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/companies-edit.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/companies-edit.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/js/companies/show.js",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/js/companies/show.js",
+    "category": "other"
+  },
+  {
+    "source": "resources/assets/sass/app.scss",
+    "proposed_destination": "Modules/CRMCore/_unmapped/resources/assets/sass/app.scss",
+    "category": "other"
+  },
+  {
+    "source": "tests/Unit/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/tests/Unit/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "tests/Feature/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/tests/Feature/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "routes/.gitkeep",
+    "proposed_destination": "Modules/CRMCore/_unmapped/routes/.gitkeep",
+    "category": "other"
+  },
+  {
+    "source": "routes/web.php",
+    "proposed_destination": "Modules/CRMCore/Routes/web.php",
+    "category": "routes"
+  },
+  {
+    "source": "routes/api.php",
+    "proposed_destination": "Modules/CRMCore/Routes/api.php",
+    "category": "routes"
+  }
+]

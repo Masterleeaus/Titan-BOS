@@ -1,0 +1,17 @@
+openapi: 3.0.3
+info:
+  title: CRMCore API
+  version: "v7-inline"
+paths:
+  /api/crmcore/health:
+    get:
+      summary: Module health
+      tags: [CRMCore]
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

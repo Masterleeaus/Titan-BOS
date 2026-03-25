@@ -1,0 +1,15 @@
+{
+  "name": "CRMCore",
+  "alias": "crmcore",
+  "description": "Extraction-only nWidart wrapper that loads donor code from Modules/CRMCore/Donor.",
+  "keywords": [
+    "crm",
+    "donor-extract",
+    "nwidart"
+  ],
+  "priority": 0,
+  "providers": [
+    "Modules\\CRMCore\\Providers\\CRMCoreServiceProvider"
+  ],
+  "files": []
+}
