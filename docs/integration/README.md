@@ -33,16 +33,28 @@ graph TD
 ### AI execution
 ```javascript
 async function execute(query, context) {
+  const attempts = [];
+
   // 1) On-device/native path (preferred)
   const localResult = await tryOnDevice(query, context);
   if (localResult?.ok) return localResult;
+  attempts.push({ tier: 'on-device', error: localResult?.error ?? 'unavailable' });
 
   // 2) Local/Ollama host
   const edgeResult = await tryLocalHost(query, context);
   if (edgeResult?.ok) return edgeResult;
+  attempts.push({ tier: 'local-host', error: edgeResult?.error ?? 'unavailable' });
 
   // 3) Cloud fallback (audited)
-  return await callCloudAI(query, context, { audit: true, notifyUser: true });
+  const cloudResult = await callCloudAI(query, context, { audit: true, notifyUser: true });
+  if (cloudResult?.ok) return cloudResult;
+
+  return {
+    ok: false,
+    error: 'All AI execution tiers failed',
+    attempts,
+    cloudError: cloudResult?.error ?? 'cloud unavailable',
+  };
 }
 ```
 

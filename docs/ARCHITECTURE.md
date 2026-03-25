@@ -3,7 +3,7 @@
 ## High-level model
 Titan Zero BOS treats every device as a federated node. The server coordinates and reconciles, but execution aims to stay local first.
 
-- **PWA runtime (`resources/`, `public/`)**: service-worker ready build, IndexedDB/local caches (planned), voice-first UI surfaces.
+- **PWA runtime (`resources/`, `public/`)**: service worker-ready build, IndexedDB/local caches (planned), voice-first UI surfaces.
 - **Backend (`app/`, `routes/`, `config/`)**: Laravel core for orchestration, APIs, tenancy, and policy enforcement.
 - **Signal queue (planned)**: local queue per device with reconciliation to server queues; server resolves conflicts rather than overwriting.
 - **AI adapters (`packages/`, `bridges/`)**: connectors to on-device/native, local/Ollama, and cloud AI in that preference order.

@@ -47,6 +47,8 @@ npm run dev                  # or npm run build for production assets
 php artisan serve            # start Laravel server
 ```
 
+> Repository slug is `Titan-BOS` for compatibility; platform identity is **Titan Zero BOS**.
+
 ### PWA/mobile-first notes
 - Ensure HTTPS + valid host when testing service-worker capable builds.
 - Prefer local storage/queues for commands; treat server sync as reconciliation.
