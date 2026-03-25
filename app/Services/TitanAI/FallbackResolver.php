@@ -2,24 +2,30 @@
 
 namespace App\Services\TitanAI;
 
+use App\Services\TitanRuntime\TelemetryService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class FallbackResolver
 {
+    public function __construct(private ?TelemetryService $telemetry = null)
+    {
+        $this->telemetry = $telemetry ?? new TelemetryService();
+    }
+
     /**
      * Execute AI with fallback order: on-device -> local/Ollama -> cloud.
      *
      * @return array{ok:bool, data?:mixed, error?:string, attempts?:array<int,array<string,mixed>>}
      */
-    public function resolve(array $payload, array $context = []): array
+    public function resolve(string $prompt, array $tools = [], array $policy = []): array
     {
         $attempts = [];
 
         $tiers = [
-            ['tier' => 'device', 'handler' => fn () => $this->callOnDevice($payload, $context)],
-            ['tier' => 'local', 'handler' => fn () => $this->callLocalHost($payload, $context)],
-            ['tier' => 'cloud', 'handler' => fn () => $this->callCloud($payload, $context)],
+            ['tier' => 'device', 'handler' => fn () => $this->callOnDevice($prompt, $tools, $policy)],
+            ['tier' => 'local', 'handler' => fn () => $this->callLocalHost($prompt, $tools, $policy)],
+            ['tier' => 'cloud', 'handler' => fn () => $this->callCloud($prompt, $tools, $policy)],
         ];
 
         foreach ($tiers as $tier) {
@@ -30,7 +36,18 @@ class FallbackResolver
                 $this->logRuntimeMeta('ai_fallback', [
                     'tier' => $tier['tier'],
                     'status' => 'ok',
+                    'latency_ms' => $result['attempt']['latency_ms'],
                 ]);
+
+                $this->telemetry->logProviderSelection(
+                    subsystem: 'titan_ai',
+                    executionLayer: $tier['tier'],
+                    success: true,
+                    metadata: [
+                        'provider' => $tier['tier'],
+                        'latency_ms' => $result['attempt']['latency_ms'],
+                    ]
+                );
 
                 return [
                     'ok' => true,
@@ -55,25 +72,25 @@ class FallbackResolver
     /**
      * Stub: implement native/on-device call.
      */
-    protected function callOnDevice(array $payload, array $context): array
+    protected function callOnDevice(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'on-device AI not implemented'];
+        return ['ok' => false, 'error' => 'on-device AI not implemented', 'provider' => 'device'];
     }
 
     /**
      * Stub: implement local/Ollama call.
      */
-    protected function callLocalHost(array $payload, array $context): array
+    protected function callLocalHost(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'local AI host not implemented'];
+        return ['ok' => false, 'error' => 'local AI host not implemented', 'provider' => 'local'];
     }
 
     /**
      * Stub: implement cloud call.
      */
-    protected function callCloud(array $payload, array $context): array
+    protected function callCloud(string $prompt, array $tools, array $policy): array
     {
-        return ['ok' => false, 'error' => 'cloud AI not implemented'];
+        return ['ok' => false, 'error' => 'cloud AI not implemented', 'provider' => 'cloud'];
     }
 
     /**
@@ -86,10 +103,14 @@ class FallbackResolver
             'status' => 'failed',
             'response' => null,
             'error' => null,
+            'latency_ms' => null,
         ];
 
         try {
+            $start = hrtime(true);
             $response = $callback();
+            $attempt['latency_ms'] = (int) ((hrtime(true) - $start) / 1_000_000);
+
             if (!empty($response['ok'])) {
                 $attempt['status'] = 'ok';
                 $attempt['response'] = $response['data'] ?? $response ?? null;
@@ -101,6 +122,14 @@ class FallbackResolver
         }
 
         $this->logRuntimeMeta('ai_attempt', $attempt);
+        $this->telemetry->logExecution(
+            subsystem: 'titan_ai',
+            event: 'attempt',
+            executionLayer: $tier,
+            success: $attempt['status'] === 'ok',
+            latencyMs: $attempt['latency_ms'],
+            metadata: $attempt
+        );
 
         return ['attempt' => $attempt];
     }
@@ -108,9 +137,12 @@ class FallbackResolver
     protected function logRuntimeMeta(string $metaKey, array $value): void
     {
         DB::table('tz_runtime_meta')->insert([
-            'category' => 'titan_ai',
-            'meta_key' => $metaKey,
-            'meta_value' => $value,
+            'subsystem' => 'titan_ai',
+            'event' => $metaKey,
+            'execution_layer' => $value['tier'] ?? null,
+            'latency_ms' => $value['latency_ms'] ?? null,
+            'success_flag' => ($value['status'] ?? null) === 'ok',
+            'metadata_json' => $value,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
