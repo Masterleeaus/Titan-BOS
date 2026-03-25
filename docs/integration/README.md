@@ -42,7 +42,7 @@ async function execute(query, context) {
   if (edgeResult?.ok) return edgeResult;
 
   // 3) Cloud fallback (audited)
-  return await callCloudAI(query, context, { audit: true, userVisible: true });
+  return await callCloudAI(query, context, { audit: true, notifyUser: true });
 }
 ```
 
