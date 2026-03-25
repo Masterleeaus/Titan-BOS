@@ -32,7 +32,7 @@ graph TD
 
 ### AI execution
 ```javascript
-async function execute(query, context) {
+async function executeWithFallback(query, context) {
   const attempts = [];
 
   // 1) On-device/native path (preferred)

@@ -48,6 +48,7 @@ php artisan serve            # start Laravel server
 ```
 
 > Repository slug is `Titan-BOS` for compatibility; platform identity is **Titan Zero BOS**.
+> Legacy docs referenced `REChain-Network-Solutions/AIPlatform`; the active repository lives at `Masterleeaus/Titan-BOS`.
 
 ### PWA/mobile-first notes
 - Ensure HTTPS + valid host when testing service-worker capable builds.
