@@ -931,6 +931,7 @@ use App\Http\Controllers\Crm\CrmCompanyController;
 use App\Http\Controllers\Crm\CrmContactController;
 use App\Http\Controllers\Crm\CrmDashboardController;
 use App\Http\Controllers\Crm\CrmDealController;
+use App\Http\Controllers\Crm\CrmLeadController;
 
 Route::middleware(['auth', 'updateUserActivity'])
     ->prefix('dashboard/crm')
@@ -955,4 +956,9 @@ Route::middleware(['auth', 'updateUserActivity'])
         Route::post('activities', [CrmActivityController::class, 'store'])->name('activities.store');
         Route::patch('activities/{activity}/done', [CrmActivityController::class, 'markDone'])->name('activities.done');
         Route::delete('activities/{activity}', [CrmActivityController::class, 'destroy'])->name('activities.destroy');
+
+        // Leads (kanban board + CRUD + convert)
+        Route::resource('leads', CrmLeadController::class);
+        Route::patch('leads/{lead}/move-status', [CrmLeadController::class, 'moveStatus'])->name('leads.move-status');
+        Route::post('leads/{lead}/convert', [CrmLeadController::class, 'convert'])->name('leads.convert');
     });
