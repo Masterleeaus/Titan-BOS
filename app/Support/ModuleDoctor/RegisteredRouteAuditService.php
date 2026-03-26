@@ -6,8 +6,8 @@ class RegisteredRouteAuditService
 {
     public function inspect(array $context, array $routeNames = []): array
     {
-        $catalog = app(RegisteredRouteCatalogService::class)->inspect($context);
-        $registered = collect($catalog['routes'] ?? []);
+        $catalogRoutes = app(RegisteredRouteCatalogService::class)->all();
+        $registered = collect($catalogRoutes);
         $missing = [];
 
         if ($registered->count()) {
@@ -25,7 +25,7 @@ class RegisteredRouteAuditService
                 : (count($missing)
                     ? count($missing) . ' named route(s) are referenced in menu/sidebar files but are not present in the known route catalog.'
                     : 'All discovered menu/sidebar route names were resolved.'),
-            'catalog' => $catalog,
+            'catalog' => $catalogRoutes,
             'missing_route_names' => array_values(array_unique($missing)),
             'resolved_route_names' => array_values(array_unique(array_diff($routeNames, $missing))),
         ];

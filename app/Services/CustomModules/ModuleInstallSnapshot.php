@@ -4,6 +4,7 @@ namespace App\Services\CustomModules;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class ModuleInstallSnapshot
 {
@@ -57,11 +58,11 @@ class ModuleInstallSnapshot
      */
     private function snapshotPermissions(string $moduleName): array
     {
-        // Capture current permissions (before install)
-        // This would be empty for new modules, but important for upgrades
+        $keyColumn = Schema::hasColumn('permissions', 'permission_key') ? 'permission_key' : 'name';
+
         return DB::table('permissions')
             ->where('module', $moduleName)
-            ->select('permission_key', 'module', 'display_name')
+            ->select($keyColumn . ' as permission_key', 'module', 'display_name')
             ->get()
             ->toArray();
     }
@@ -97,6 +98,8 @@ class ModuleInstallSnapshot
      */
     private function restorePermissions(string $moduleName, array $snapshotPermissions): array
     {
+        $keyColumn = Schema::hasColumn('permissions', 'permission_key') ? 'permission_key' : 'name';
+
         // Delete all current permissions for module
         $deleted = DB::table('permissions')
             ->where('module', $moduleName)
@@ -106,10 +109,14 @@ class ModuleInstallSnapshot
         $restored = 0;
         
         foreach ($snapshotPermissions as $perm) {
+            $permKey = is_array($perm)
+                ? ($perm['permission_key'] ?? '')
+                : ($perm->permission_key ?? '');
+
             DB::table('permissions')->insert([
-                'permission_key' => $perm['permission_key'] ?? $perm->permission_key,
+                $keyColumn => $permKey,
                 'module' => $moduleName,
-                'display_name' => $perm['display_name'] ?? $perm->display_name ?? '',
+                'display_name' => is_array($perm) ? ($perm['display_name'] ?? '') : ($perm->display_name ?? ''),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

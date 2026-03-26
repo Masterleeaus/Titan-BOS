@@ -1,19 +1,22 @@
-@if ($plugins->where('envato_id', config(strtolower($module) . '.envato_item_id'))->first())
-    @if ($plugins->where('envato_id', config(strtolower($module) . '.envato_item_id'))->pluck('version')->first() > \Illuminate\Support\Facades\File::get($module->getPath() . '/version.txt'))
-
+@php
+    $currentVersion = \Illuminate\Support\Facades\File::get($module->getPath() . '/version.txt');
+    $plugin = $plugins->where('envato_id', config(strtolower($module) . '.envato_item_id'))->first();
+    $latestVersion = $plugin?->version;
+@endphp
+@if ($plugin)
+    @if (version_compare($latestVersion, $currentVersion, '>'))
         <span class="badge badge-danger" data-toggle="tooltip"
               data-original-title="@lang('app.moduleUpdateMessage', [
                             'name' => $module->getName(),
-                            'version' => $plugins->where('envato_id', config(strtolower($module) . '.envato_item_id'))->pluck('version')->first(),
+                            'version' => $latestVersion,
         ])">
-
-            {{ \Illuminate\Support\Facades\File::get($module->getPath() . '/version.txt') }}
+            {{ $currentVersion }}
         </span>
     @else
         <span class="badge badge-success">
-            {{ \Illuminate\Support\Facades\File::get($module->getPath() . '/version.txt') }}
+            {{ $currentVersion }}
         </span>
     @endif
 @else
-    <span class="badge badge-success">{{ \Illuminate\Support\Facades\File::get($module->getPath() . '/version.txt') }}</span>
+    <span class="badge badge-success">{{ $currentVersion }}</span>
 @endif

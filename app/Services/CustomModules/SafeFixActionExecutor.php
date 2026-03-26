@@ -118,7 +118,7 @@ class SafeFixActionExecutor
             }
         }
         
-        $allSuccess = !empty(array_filter(
+        $allSuccess = empty(array_filter(
             $results,
             fn($r) => ($r['success'] ?? false) === false
         ));

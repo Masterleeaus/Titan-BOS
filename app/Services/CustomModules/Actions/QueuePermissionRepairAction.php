@@ -4,6 +4,7 @@ namespace App\Services\CustomModules\Actions;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class QueuePermissionRepairAction
 {
@@ -53,6 +54,8 @@ class QueuePermissionRepairAction
             $updated = 0;
             $errors = [];
             
+            $keyColumn = Schema::hasColumn('permissions', 'permission_key') ? 'permission_key' : 'name';
+
             foreach ($permissions as $perm) {
                 try {
                     $key = $perm['key'] ?? null;
@@ -63,13 +66,13 @@ class QueuePermissionRepairAction
                     
                     // Check if exists
                     $existing = DB::table('permissions')
-                        ->where('permission_key', $key)
+                        ->where($keyColumn, $key)
                         ->first();
                     
                     if ($existing) {
                         // Update
                         DB::table('permissions')
-                            ->where('permission_key', $key)
+                            ->where($keyColumn, $key)
                             ->update([
                                 'module' => $moduleName,
                                 'display_name' => $perm['label'] ?? '',
@@ -79,7 +82,7 @@ class QueuePermissionRepairAction
                     } else {
                         // Insert
                         DB::table('permissions')->insert([
-                            'permission_key' => $key,
+                            $keyColumn => $key,
                             'module' => $moduleName,
                             'display_name' => $perm['label'] ?? '',
                             'created_at' => now(),

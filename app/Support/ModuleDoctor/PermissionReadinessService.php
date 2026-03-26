@@ -6,13 +6,17 @@ class PermissionReadinessService
 {
     public function inspect(array $module): array
     {
-        $keys = app(PermissionUsageExtractorService::class)->extract($module['files'] ?? []);
-        $roleMatrix = app(PermissionPivotMatrixService::class)->matrix($keys);
+        $modulePath = $module['path'] ?? '';
+        $extracted = app(PermissionUsageExtractorService::class)->extract($modulePath);
+        $keys = $extracted['permission_keys'] ?? [];
+        $roleMatrix = app(PermissionPivotMatrixService::class)->inspect($keys);
+        $matrix = $roleMatrix['matrix'] ?? [];
 
         return [
             'keys' => $keys,
-            'missing_keys' => array_values(array_filter($keys, fn ($key) => empty($roleMatrix[$key]['exists']))),
-            'unmapped_keys' => array_values(array_filter($keys, fn ($key) => empty($roleMatrix[$key]['roles']))),
+            'permission_keys' => $keys,
+            'missing_keys' => array_values(array_filter($keys, fn ($key) => empty($matrix[$key]))),
+            'unmapped_keys' => array_values(array_filter($keys, fn ($key) => empty($matrix[$key]))),
             'ready' => !empty($keys),
             'matrix' => $roleMatrix,
         ];

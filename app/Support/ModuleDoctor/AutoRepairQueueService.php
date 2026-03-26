@@ -31,4 +31,12 @@ class AutoRepairQueueService
 
         return $queue;
     }
+
+    /**
+     * Alias for build() — called by controller and other services.
+     */
+    public function queue(array $audit): array
+    {
+        return $this->build($audit);
+    }
 }

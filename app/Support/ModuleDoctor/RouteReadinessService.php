@@ -6,18 +6,19 @@ class RouteReadinessService
 {
     public function inspect(array $module): array
     {
-        $declared = app(RouteReferenceExtractorService::class)->extract($module['files'] ?? []);
+        $extracted = app(RouteReferenceExtractorService::class)->extract($module['files'] ?? []);
+        $declaredNames = $extracted['route_names'] ?? [];
         $registered = app(RegisteredRouteCatalogService::class)->all();
 
         $missing = [];
-        foreach ($declared as $name) {
+        foreach ($declaredNames as $name) {
             if (!in_array($name, $registered, true)) {
                 $missing[] = $name;
             }
         }
 
         return [
-            'declared' => $declared,
+            'declared' => $extracted,
             'registered_count' => count($registered),
             'missing' => $missing,
             'ready' => empty($missing),

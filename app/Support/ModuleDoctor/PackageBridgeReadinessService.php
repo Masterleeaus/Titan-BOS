@@ -6,15 +6,18 @@ class PackageBridgeReadinessService
 {
     public function inspect(array $module): array
     {
-        $bridge = app(PackageEntitlementAuditService::class)->inspect($module);
-        $company = app(CompanyModuleSettingAuditService::class)->inspect($module);
-        $registry = app(ModuleRegistryAuditService::class)->inspect($module);
+        $moduleName = $module['module_name'] ?? (is_string($module) ? $module : '');
+        $bridge = app(PackageEntitlementAuditService::class)->inspect($moduleName);
+        $company = app(CompanyModuleSettingAuditService::class)->inspect($moduleName);
+        $registry = app(ModuleRegistryAuditService::class)->inspect($moduleName);
 
         return [
             'bridge' => $bridge,
             'company' => $company,
             'registry' => $registry,
-            'ready' => ($bridge['ready'] ?? false) && ($company['ready'] ?? false) && ($registry['ready'] ?? false),
+            'ready' => ($bridge['status'] ?? 'warn') === 'pass'
+                && ($company['status'] ?? 'warn') === 'pass'
+                && ($registry['status'] ?? 'warn') === 'pass',
         ];
     }
 }

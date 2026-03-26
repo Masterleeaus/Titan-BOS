@@ -12,7 +12,7 @@
             <i class="fa fa-shopping-cart mr-1"></i>Renew support now
         </a>
 {{--    Show only for universal Bundle       --}}
-    @elseif(str_contains('UniversalBundle',$module))
+    @elseif(str_contains($module, 'UniversalBundle'))
         @if (\Carbon\Carbon::parse($fetchSetting->supported_until)->diffInDays() < 60)
             <button type="button" class="btn btn-outline-secondary btn-sm refreshModule f-11"
                     data-module-name="{{ $module }}">
