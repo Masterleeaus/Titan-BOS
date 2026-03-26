@@ -23,13 +23,19 @@ class WorkSuiteServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Surface-language helpers (worksuite_label())
         if (file_exists(base_path('app/Support/worksuite_helpers.php'))) {
             require_once base_path('app/Support/worksuite_helpers.php');
         }
 
-        if (file_exists(base_path('routes/worksuite.php'))) {
-            Route::middleware(config('worksuite.middleware', ['auth']))
-                ->group(base_path('routes/worksuite.php'));
+        // Bridge helpers: user(), company(), user_roles(), abort_403()
+        // These shim WorkSuite global functions that are absent in MagicAI.
+        if (file_exists(base_path('app/Support/worksuite_bridge.php'))) {
+            require_once base_path('app/Support/worksuite_bridge.php');
         }
+
+        // Routes are loaded by RouteServiceProvider (web + auth middleware).
+        // The duplicate registration below is intentionally removed to avoid
+        // double-registration. See app/Providers/RouteServiceProvider.php.
     }
 }

@@ -1,9 +1,29 @@
 # WorkCore — Migration Actions
 
-## Status
+## ⚠ DO NOT RUN BLINDLY
 
 WorkSuite migrations have been copied to `database/migrations/worksuite/` but
-**NOT run**. They must be reviewed against the current schema before execution.
+**NOT run**. One migration in particular is destructive if run against an existing
+Titan-BOS database — see the critical risk section below.
+
+## Critical risk: Non-SaaS → SaaS migration
+
+```
+database/migrations/worksuite/2024_01_12_214740_worksuite_non_saas_to_saas_migration.php
+```
+
+This migration:
+- Adds `company_id` columns to ~50 existing tables (users, projects, tasks, etc.)
+- Runs `NonSaasToSaasSeeder` which backfills data
+- Is **idempotent** in WorkSuite but **NOT** safe against Titan-BOS schema
+
+**Action:** **EXCLUDE** this file when running WorkSuite migrations. Move or delete it:
+```bash
+mv database/migrations/worksuite/2024_01_12_214740_worksuite_non_saas_to_saas_migration.php \
+   database/migrations/worksuite/_EXCLUDED/
+```
+
+## Status: migrations not yet run
 
 ## CRM domain migrations (31 files)
 
@@ -41,14 +61,33 @@ These are in `database/migrations/worksuite/`. They create the following tables:
 | Support / Comms | tickets, ticket_replies, notices, messages, message_settings |
 | Platform / Misc | 50+ support tables |
 
+## Full migration count (from deep scan)
+
+WorkCore source contains **274 migrations** total across all domain slices:
+
+| Category | Count |
+|----------|-------|
+| Core tables (users, companies, roles) | 15+ |
+| Financial (invoices, payments, expenses) | 45+ |
+| HR / Attendance / Leave | 50+ |
+| Projects / Tasks / Timelogs | 40+ |
+| Clients / CRM | 30+ |
+| Tickets / Support | 20+ |
+| Products / Orders | 15+ |
+| Settings tables | 35+ |
+| Custom fields | 10+ |
+| Documents | 15+ |
+
+Only the **31 CRM domain migrations** are currently in `database/migrations/worksuite/`.
+Remaining 243 arrive when the other domain slices are extracted (Phase 2+).
+
 ## Recommended migration procedure (Phase 2)
 
-1. Run `php artisan migrate:status` to see current state.
-2. For each WorkSuite migration, check if the target table already exists.
-3. Rename the migration file with a `worksuite_` prefix (e.g., `worksuite_leads`) if
-   the table name conflicts with an existing host table.
-4. Add `company_id` → `user_id` tenancy shim in migration if needed.
-5. Run migrations in domain order: CRM → Finance → Projects → HR → Support → Platform.
+1. Exclude the non-SaaS migration (see critical risk above).
+2. Run `php artisan migrate:status` to see current host schema state.
+3. For each WorkSuite migration, check if the target table already exists.
+4. Prefix conflicting migration file names with `worksuite_` (e.g. `worksuite_leads`).
+5. Run in domain order: CRM → Finance → Projects → HR → Support → Platform.
 
 ## Running CRM migrations (when ready)
 

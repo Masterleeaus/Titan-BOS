@@ -91,3 +91,108 @@ These are completely separate concerns. No collision.
 Host `dashboard.crm.*` (native Titan CRM) and WorkCore `dashboard.user.customers.*` /
 `dashboard.user.leads.*` serve different surfaces. Both can coexist. Long-term, the
 native CRM may be replaced or unified with WorkCore's CRM domain.
+
+---
+
+## Conflict 7: Missing global helpers — `user()`, `company()`, `user_roles()`, `abort_403()`
+
+**Issue (discovered via deep scan):** WorkSuite controllers rely on globally-available
+helper functions that do not exist in MagicAI:
+
+| Helper | WorkSuite usage | MagicAI equivalent |
+|--------|-----------------|--------------------|
+| `user()` | `user()->permission('view_invoices')` | `auth()->user()` |
+| `company()` | `company()->id` for tenant scoping | `auth()->user()->companies()->first()` |
+| `user_roles()` | `in_array('client', user_roles())` | Spatie `getRoleNames()` |
+| `abort_403($bool)` | `abort_403(!$condition)` | `abort_if(!$condition, 403)` |
+
+**Resolution:** `app/Support/worksuite_bridge.php` defines all four helpers as
+conditional `function_exists` guards. Loaded by `WorkSuiteServiceProvider::boot()`.
+No host code is modified; helpers only activate when the WorkSuite namespace is used.
+
+---
+
+## Conflict 8: Missing `AccountBaseController`
+
+**Issue:** All 175 WorkSuite controllers extend `AccountBaseController`, which sets up
+`$this->user`, `$this->company`, `$this->data[]`, module access checks, and view sharing.
+This class does not exist in MagicAI.
+
+**Resolution:** `app/Http/Controllers/WorkSuite/AccountBaseController.php` bridges this.
+WorkCore BOS controllers extend this bridge class instead of the original.
+Stub methods (`requireModule()`, `checkPermission()`) are no-ops during scaffold phase;
+Phase 2 wires them to actual data.
+
+---
+
+## Conflict 9: Missing `CompanyScope` / `HasCompany` trait
+
+**Issue (discovered via deep scan):** Every WorkSuite model that stores business data
+uses the `HasCompany` trait, which registers `CompanyScope` as a global Eloquent scope.
+This automatically filters all queries by `company_id`. Without it, WorkSuite models
+would return unscoped data across all users.
+
+**Resolution:**
+- `app/Scopes/WorkSuite/CompanyScope.php` — Eloquent scope; filters by `company_id`
+  resolved from `company()` bridge helper.
+- `app/Traits/WorkSuite/HasCompany.php` — applies the scope on boot, auto-fills
+  `company_id` on `creating`, provides `company()` relationship and `forCompany()` scope.
+
+Apply to WorkSuite models as they are wired in Phase 2:
+```php
+use App\Traits\WorkSuite\HasCompany;
+
+class Invoice extends Model {
+    use HasCompany;
+}
+```
+
+Bypass for admin/reporting queries:
+```php
+Invoice::withoutCompanyScope()->get();
+```
+
+---
+
+## Conflict 10: WorkSuite `Reply::success()` AJAX helper
+
+**Issue:** WorkSuite controllers return JSON via `Reply::success()`, `Reply::error()`,
+and `Reply::dataOnly()`. This class doesn't exist in MagicAI.
+
+**Resolution:** `app/Support/WorkSuiteReply.php` provides the `WorkSuiteReply` class
+with identical method signatures. When porting WorkSuite controllers, replace:
+```php
+return Reply::success('messages.deleteSuccess');
+// with:
+return \App\Support\WorkSuiteReply::success(__('messages.deleteSuccess'));
+```
+
+---
+
+## Conflict 11: Granular permission model (`all` / `added` / `owned` / `both`)
+
+**Issue:** WorkSuite uses a 4-level per-resource permission model checked via
+`user()->permission('view_invoices')` returning one of `'all'`, `'added'`, `'owned'`,
+`'both'`. MagicAI uses Spatie Permission (role-based, boolean).
+
+**Resolution (Phase 2):**
+- Create a `WorkSuitePermissionService` that checks Spatie roles and maps to the
+  WorkSuite 4-level model.
+- Default during scaffold: `AccountBaseController::checkPermission()` is a no-op
+  (all authenticated users pass).
+- Document required permissions per domain in a permission seeder.
+
+---
+
+## ⚠ Critical Migration Risk: `2024_01_12_214740_worksuite_non_saas_to_saas_migration`
+
+**Issue:** This migration adds `company_id` columns to ~50 existing tables and runs
+a `NonSaasToSaasSeeder`. If executed against a database that already has those columns,
+it will fail or cause duplicate data.
+
+**Resolution:**
+- This migration is inside `database/migrations/worksuite/` (not yet run).
+- **DO NOT RUN** this migration on an existing Titan-BOS database.
+- Instead, extract only the individual table-creation migrations for the business
+  domain tables (invoices, employees, etc.) and run those individually.
+- See `docs/integration/migration-actions.md` for the safe procedure.
