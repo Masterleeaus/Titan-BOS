@@ -4,6 +4,13 @@
 
 Titan Zero BOS is a business operating system built for device-first, privacy-first operations. It treats every device as a federated node that can work offline, reconcile when connected, and prefer on-device intelligence before using any remote AI. The platform ships with a Laravel core, Blade/Livewire UI, and a PWA-oriented frontend toolchain (Vite, Tailwind) that we are aligning to this model.
 
+## Product architecture and engineering highlights
+
+A legacy Laravel business platform with a broad extension surface and a PWA-oriented frontend, preserved as an earlier Titan Zero implementation.
+
+- **Architecture:** Laravel 10, Blade/Livewire, Vite and Tailwind form the application shell; extensions and provider discovery organize product capabilities. The repository also documents a device-first, offline/federated target architecture.
+- **Distinctive engineering:** Its engineering story is the transition from a server-centred Laravel platform toward device-led state, local queues, and reconciliation-based synchronization.
+
 ## What this repository is
 - **Platform identity:** Titan Zero BOS (formerly documented as MagicAI / AIPlatform in legacy materials).
 - **Repository slug:** `Titan-BOS` (kept for continuity); platform identity is Titan Zero BOS.
