@@ -1,4 +1,4 @@
-# Titan Zero BOS
+# Titan Zero Business Operating System
 
 Titan Zero BOS is a business operating system built for device-first, privacy-first operations. It treats every device as a federated node that can work offline, reconcile when connected, and prefer on-device intelligence before using any remote AI. The platform ships with a Laravel core, Blade/Livewire UI, and a PWA-oriented frontend toolchain (Vite, Tailwind) that we are aligning to this model.
 
